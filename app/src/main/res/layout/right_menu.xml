@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.slide.model.SlideViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:background="@color/light_gray"
+        android:foregroundGravity="center_vertical"
+        tools:layout_width="200dp">
+
+        <TextView
+            android:id="@+id/tv_background_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="배경색"
+            android:textColor="#000000"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="@id/gl_end_end"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@id/gl_end_start"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/et_background"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:ems="10"
+            android:inputType="text"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            app:cornerRadius="5dp"
+            app:layout_constraintEnd_toEndOf="@id/gl_end_end"
+            app:layout_constraintStart_toStartOf="@+id/gl_end_start"
+            app:layout_constraintTop_toBottomOf="@+id/tv_background_color" />
+
+        <TextView
+            android:id="@+id/tv_alpha_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="투명도"
+            android:textColor="#000000"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="@id/gl_end_end"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@id/gl_end_start"
+            app:layout_constraintTop_toBottomOf="@+id/et_background" />
+
+        <TextView
+            android:id="@+id/tv_alpha"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/et_linear_alpha"
+            android:text="0"
+            android:textAlignment="center"
+            android:textSize="25sp"
+            app:layout_constraintEnd_toEndOf="@id/gl_end_end"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/gl_end_start"
+            app:layout_constraintTop_toBottomOf="@+id/tv_alpha_title" />
+
+
+        <TextView
+            android:id="@+id/tv_minus"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/tv_linear_plus"
+            android:gravity="center"
+            android:text="-"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            app:cornerRadius="3dp" />
+
+        <View
+            android:id="@+id/contour"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:background="@drawable/contour_shape" />
+
+
+        <TextView
+            android:id="@+id/tv_plus"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/tv_linear_minus"
+            android:gravity="center"
+            android:text="+"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/flow_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="30dp"
+            app:constraint_referenced_ids="tv_minus,contour,tv_plus"
+            app:flow_horizontalBias="0.5"
+            app:flow_horizontalStyle="packed"
+            app:flow_maxElementsWrap="3"
+            app:flow_wrapMode="chain"
+            app:layout_constraintEnd_toEndOf="@id/gl_end_end"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@id/tv_alpha"
+            app:layout_constraintTop_toBottomOf="@+id/et_background" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_end_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintGuide_end="6dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_end_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="6dp"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
