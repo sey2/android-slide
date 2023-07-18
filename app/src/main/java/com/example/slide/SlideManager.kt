@@ -6,6 +6,8 @@ import com.example.slide.model.Slide
 class SlideManager {
     private val slides = mutableListOf<Slide>()
     private val slidesLiveData = MutableLiveData<List<Slide>>(slides)
+    val slideCount: Int
+        get() = slides.size
 
     fun getSlideData(index: Int): Slide = slides[index]
 
