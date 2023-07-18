@@ -83,7 +83,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.incRightMenu.tvMinus.setOnClickListener {
-            // 현재 선택된 슬라이드 객체를 얻는다.
             val selectedSlide = viewModel.selectedSlide.value
 
             selectedSlide?.let {
