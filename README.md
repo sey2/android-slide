@@ -35,4 +35,15 @@ UDF 아키텍처 패턴에 맞게 코드를 수정
 **개선후**
 <img width="394" alt="스크린샷 2023-07-19 오전 11 41 05" src="https://github.com/softeerbootcamp-2nd/android-slide/assets/54762273/204e3819-91c7-47b7-a9e6-f9fd9269e0fa">
 
+## (Step 1-4) Slide 목록 구현 하기
+- 버튼을 누르면 사각형 Slide가 화면에 배치
+- 드래그를 이용하여 사각형을 이동 시킬 수 있는 기능
+- 리싸이클러뷰를 이용해 목록 표시
+- 목록을 터치할 때마다 해당 슬라이드 View의 선택과 해제를 반복하도록 처리하는 기능
+- 목록을 드래그해서 순서를 바꿀 수 있는 기능
+
+### 결과화면
+![ezgif com-video-to-gif (1)](https://github.com/softeerbootcamp-2nd/android-slide/assets/54762273/8551813b-64b7-41b5-9fed-56cdf5fa9aad)
+
+
 
