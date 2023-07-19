@@ -7,22 +7,34 @@ import com.example.slide.model.Slide
 
 class SlideManager {
     private val slides = mutableListOf<Slide>()
+
     val slideCount: Int
         get() = slides.size
 
+    fun getSlideData(id: String): Slide? = slides.find { it.id == id }
+
     fun getSlideData(index: Int): Slide = slides[index]
+
+    fun getSlideData(slide: Slide): Slide = slides[slides.indexOf(slide)]
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun addSlide() {
         slides.add(SquareFactory.createSquareSlide(213))
     }
 
-    fun changeColor(index: Int, color: Int) {
-        slides.getOrNull(index)?.backgroundColor = color
+    fun changeColor(slide: Slide, color: Int) {
+        slides.getOrNull(findSlideIndex(slide))?.backgroundColor = color
     }
 
-    fun changeAlpha(index: Int, alpha: Int) {
-        slides.getOrNull(index)?.alpha = alpha
+    fun changeAlpha(slide: Slide, alpha: Int) {
+        slides.getOrNull(findSlideIndex(slide))?.alpha = alpha
+    }
+
+    private fun findSlideIndex(slide: Slide) = slides.indexOf(slide)
+
+    fun setSlides(list: List<Slide>) {
+        slides.clear()
+        slides.addAll(list)
     }
 
     fun getSlides() = slides

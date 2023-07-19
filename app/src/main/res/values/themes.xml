@@ -22,6 +22,6 @@
         <item name="cornerRadius">8dp</item>
     </style>
     
-    <dimen name="selected_stroke_width">2dp</dimen>
+    <dimen name="selected_stroke_width">4dp</dimen>
     <dimen name="default_stroke_width">0dp</dimen>
 </resources>

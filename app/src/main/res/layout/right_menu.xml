@@ -38,6 +38,7 @@
             android:inputType="text"
             android:textColor="@color/black"
             android:textSize="12sp"
+            android:backgroundTint="@color/white"
             app:cornerRadius="5dp"
             app:layout_constraintEnd_toEndOf="@id/gl_end_end"
             app:layout_constraintStart_toStartOf="@+id/gl_end_start"
