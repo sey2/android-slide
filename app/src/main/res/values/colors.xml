@@ -11,5 +11,6 @@
     <color name="light_gray">#E6E6EA</color>
     <color name="blue">#027BFF</color>
     <color name="yellow">#FFCD00</color>
+    <color name="sky">#C6DCF8</color>
     <color name="transparent">@android:color/transparent</color>
 </resources>
