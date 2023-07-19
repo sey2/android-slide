@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        viewModel.slideManager.addSlide(SquareFactory.createSquareSlide(212))
+        viewModel.addSlide()
         viewModel.selectSlide(0)
     }
 

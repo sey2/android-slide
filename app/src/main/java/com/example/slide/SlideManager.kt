@@ -1,5 +1,8 @@
 package com.example.slide
 
+import android.os.Build
+import androidx.annotation.RequiresApi
+import com.example.slide.factory.SquareFactory
 import com.example.slide.model.Slide
 
 class SlideManager {
@@ -9,8 +12,9 @@ class SlideManager {
 
     fun getSlideData(index: Int): Slide = slides[index]
 
-    fun addSlide(slide: Slide) {
-        slides.add(slide)
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun addSlide() {
+        slides.add(SquareFactory.createSquareSlide(213))
     }
 
     fun changeColor(index: Int, color: Int) {

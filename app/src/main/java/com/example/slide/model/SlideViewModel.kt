@@ -1,5 +1,7 @@
 package com.example.slide.model
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,6 +18,12 @@ class SlideViewModel : ViewModel() {
 
     fun selectSlide(index: Int) {
         _selectedSlide.value = slideManager.getSlideData(index)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun addSlide() {
+        slideManager.addSlide()
+        _slides.value = slideManager.getSlides()
     }
 
     fun changeColor(index: Int, color: Int) {

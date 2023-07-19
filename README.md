@@ -23,4 +23,16 @@ Android 학습 프로젝트 #2
 ### 결과화면
 ![ezgif com-video-to-gif (1)](https://github.com/softeerbootcamp-2nd/android-slide/assets/54762273/af531e7d-5a36-4d31-99e9-1d833f9242ba)
 
+## (Step 1-3) UDF
+
+UDF 아키텍처 패턴에 맞게 코드를 수정
+
+이전 코드의 문제점
+
+**UI Layer에서 ViewModel의 상태를 아래와 같이 직접 변경하는 코드를 사용**
+<img width="570" alt="스크린샷 2023-07-19 오전 11 37 40" src="https://github.com/softeerbootcamp-2nd/android-slide/assets/54762273/78071a9f-89ca-4c3f-a50c-c721e3881448">
+
+**개선후**
+<img width="394" alt="스크린샷 2023-07-19 오전 11 41 05" src="https://github.com/softeerbootcamp-2nd/android-slide/assets/54762273/204e3819-91c7-47b7-a9e6-f9fd9269e0fa">
+
 
