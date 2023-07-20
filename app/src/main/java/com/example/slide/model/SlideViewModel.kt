@@ -26,7 +26,6 @@ class SlideViewModel(private val slideManager: SlideManager) : ViewModel(){
         _selectedSlide.value = slideManager.getSlideData(index)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun addSlide() {
         slideManager.addSlide()
         _slides.value = slideManager.getSlides()

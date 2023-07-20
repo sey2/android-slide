@@ -36,7 +36,6 @@ class MainActivity : AppCompatActivity(), OnSlideListItemListener {
         initRecyclerView()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun initViewModel() {
         viewModel = ViewModelProvider(this, SlideViewModelFactory(SlideManager()))[SlideViewModel::class.java]
         binding.lifecycleOwner = this
@@ -65,7 +64,6 @@ class MainActivity : AppCompatActivity(), OnSlideListItemListener {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun initListeners() {
         binding.boardView.setOnClickListener {
             viewModel.clearSelectedSlide()

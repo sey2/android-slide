@@ -17,7 +17,6 @@ class SlideManager {
 
     fun getSlideData(slide: Slide): Slide = slides[slides.indexOf(slide)]
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun addSlide() {
         slides.add(SquareFactory.createSquareSlide(213))
     }
