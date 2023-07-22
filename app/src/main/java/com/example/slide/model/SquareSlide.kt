@@ -4,10 +4,10 @@ import android.graphics.Color
 import android.os.Build
 import androidx.annotation.RequiresApi
 
-data class Square(
+data class SquareSlide(
     override val id: String,
-    val sideLength: Int,
-    override var backgroundColor: Int,
+    override var sideLength: Int,
+    var backgroundColor: Int,
     override var alpha: Int
 ) : Slide {
     @RequiresApi(Build.VERSION_CODES.O)

@@ -1,7 +1,8 @@
 package com.example.slide.model
 
+
 interface Slide {
     val id: String
-    var backgroundColor: Int
+    var sideLength: Int
     var alpha: Int
 }

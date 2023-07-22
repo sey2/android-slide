@@ -1,9 +1,10 @@
-package com.example.slide
+package com.example.slide.manager
 
-import android.os.Build
-import androidx.annotation.RequiresApi
-import com.example.slide.factory.SquareFactory
+import com.example.slide.factory.SlideCreationFactory
+import com.example.slide.model.ImageSlide
 import com.example.slide.model.Slide
+import com.example.slide.model.SquareSlide
+import kotlin.random.Random
 
 class SlideManager {
     private val slides = mutableListOf<Slide>()
@@ -18,11 +19,22 @@ class SlideManager {
     fun getSlideData(slide: Slide): Slide = slides[slides.indexOf(slide)]
 
     fun addSlide() {
-        slides.add(SquareFactory.createSquareSlide(213))
+        if (Random.nextBoolean()) {
+            slides.add(SlideCreationFactory.createSquareSlide(213))
+        } else {
+            slides.add(SlideCreationFactory.createImageSlide(213))
+        }
     }
 
     fun changeColor(slide: Slide, color: Int) {
-        slides.getOrNull(findSlideIndex(slide))?.backgroundColor = color
+        (slides.getOrNull(findSlideIndex(slide)) as SquareSlide)?.backgroundColor = color
+    }
+
+    fun changImgByteArr(slide: Slide, newImageBytes: ByteArray) {
+        val targetSlide = slides.find { it.id == slide.id }
+        if (targetSlide is ImageSlide) {
+            targetSlide.imageBytes = newImageBytes
+        }
     }
 
     fun changeAlpha(slide: Slide, alpha: Int) {
@@ -37,4 +49,6 @@ class SlideManager {
     }
 
     fun getSlides() = slides
+
+    fun getSlideIndex(slide: Slide): Int = slides.indexOf(slide)
 }
