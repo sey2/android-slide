@@ -14,12 +14,12 @@ class SlideMoveCallListener(private val adapter: SlideListAdapter): ItemTouchHel
     override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
         val fromPosition = viewHolder.adapterPosition
         val toPosition = target.adapterPosition
-        adapter.moveItem(fromPosition, toPosition)
+        adapter.moveItemAndUpdate(fromPosition, toPosition)
         return true
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        // No swiping required.
+
     }
 
     override fun isLongPressDragEnabled(): Boolean {
