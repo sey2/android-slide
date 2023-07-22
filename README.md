@@ -55,4 +55,9 @@ UDF 아키텍처 패턴에 맞게 코드를 수정
 ### 결과화면
 ![ezgif com-video-to-gif](https://github.com/softeerbootcamp-2nd/android-slide/assets/54762273/959cf1c6-ee9f-43d7-a7bb-b30418a50c6c)
 
-
+## (Step 3-5) 목록 기능 추가
+- 목록 팝업 메뉴 (아이템 이동 기능)
+- 사각형 슬라이드, 이미지 슬라이드에 따른 목록 리스트 이미지 변경
+---
+### 결과화면
+![ezgif com-video-to-gif](https://github.com/softeerbootcamp-2nd/android-slide/assets/54762273/8064f12e-e7fe-4438-a556-6d351f39d8ff)
