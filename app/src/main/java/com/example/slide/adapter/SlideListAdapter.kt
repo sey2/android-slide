@@ -12,10 +12,11 @@ import com.example.slide.model.ImageSlide
 import com.example.slide.model.Slide
 
 class SlideListAdapter(
-    var itemList: MutableList<Slide>,
+    private val slideList: List<Slide>,
     private val onSlideClickListener: SlideListItemClickListener
 ) :
     RecyclerView.Adapter<SlideListAdapter.SlideListViewHolder>() {
+    var itemList: MutableList<Slide> = slideList.toMutableList()
     var selectedPosition: Int = -1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SlideListViewHolder {
@@ -33,6 +34,11 @@ class SlideListAdapter(
                 onSlideClickListener.onItemClick(adapterPosition, this)
             }
         }
+    }
+
+    fun addItem(item: Slide) {
+        itemList.add(item)
+        notifyItemInserted(itemList.size - 1)
     }
 
     fun getAllItems() = itemList
