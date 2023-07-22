@@ -2,11 +2,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginBottom="3dp">
 
+    <data>
+        <variable
+            name="isSelected"
+            type="java.lang.Boolean"/>
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/item_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFFFFF">
+
+        <View
+            android:id="@+id/view_select_color"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@{isSelected ? @color/purple_200 : @color/transparent}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/iv_item"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_num"
@@ -39,5 +55,6 @@
             app:layout_constraintStart_toStartOf="@+id/view_item"
             app:layout_constraintTop_toTopOf="@+id/view_item"
             app:srcCompat="@drawable/img_squar" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

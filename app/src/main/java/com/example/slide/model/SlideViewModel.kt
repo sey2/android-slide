@@ -1,5 +1,6 @@
 package com.example.slide.model
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -86,3 +87,4 @@ class SlideViewModel(private val slideManager: SlideManager) : ViewModel() {
         _selectedSlide.value = null
     }
 }
+

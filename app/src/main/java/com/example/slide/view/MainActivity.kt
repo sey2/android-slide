@@ -1,17 +1,15 @@
-package com.example.slide.view
+package com.example.slide.ui
 
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
-import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,8 +33,9 @@ class MainActivity : AppCompatActivity(), SlideListItemClickListener {
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: SlideViewModel
     private lateinit var slideAdapter: SlideListAdapter
-    private lateinit var getImageResultLauncher: ActivityResultLauncher<Intent>
+    private val getImageResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult(), ::handleImageResult)
     private val whiteColor = 255
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
@@ -44,25 +43,26 @@ class MainActivity : AppCompatActivity(), SlideListItemClickListener {
         initListeners()
         initRecyclerView()
         initViewModel()
-
-        getImageResultLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == Activity.RESULT_OK) {
-                    val selectedImageUri = result.data?.data
-                    val selectedSlide = viewModel.selectedSlide.value
-
-                    if (selectedSlide is ImageSlide) {
-                        val imageBytes = selectedImageUri?.let { uriToByteArray(it) }
-                        imageBytes?.let {
-                            selectedSlide.imageBytes = it
-                            viewModel.changeImgByteArr(selectedSlide, it)
-                        }
-                    }
-
-                }
-            }
     }
 
+    private fun handleImageResult(result: ActivityResult) {
+        if (result.resultCode == Activity.RESULT_OK) {
+            val selectedImageUri = result.data?.data
+            handleImageSlide(selectedImageUri)
+        }
+    }
+
+    private fun handleImageSlide(selectedImageUri: Uri?) {
+        val selectedSlide = viewModel.selectedSlide.value
+
+        if (selectedSlide is ImageSlide) {
+            val imageBytes = selectedImageUri?.let { uriToByteArray(it) }
+            imageBytes?.let {
+                selectedSlide.imageBytes = it
+                viewModel.changeImgByteArr(selectedSlide, it)
+            }
+        }
+    }
     private fun initViewModel() {
         viewModel = ViewModelProvider(
             this,
@@ -70,24 +70,28 @@ class MainActivity : AppCompatActivity(), SlideListItemClickListener {
         )[SlideViewModel::class.java]
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
+        binding.incRightMenu.viewModel = viewModel
 
-        viewModel.selectedSlide.observe(this, Observer { slide ->
+        viewModel.selectedSlide.observe(this) { slide ->
             slide?.let {
                 updateSlideProperties(slide)
-
             }
-        })
+        }
 
-        viewModel.slides.observe(this, Observer { slides ->
+        viewModel.slides.observe(this) { slides ->
             slides?.let {
                 slideAdapter.setItems(it)
                 updateSlideProperties(viewModel.selectedSlide.value)
             }
-        })
+        }
 
-        viewModel.selectedSlideIndex.observe(this, Observer { index ->
-            slideAdapter.slideClickItemUpdate(index!!)
-        })
+        viewModel.selectedSlideIndex?.observe(this) { index ->
+            index?.let {
+                slideAdapter.slideClickItemUpdate(it)
+            } ?: run {
+                slideAdapter.slideClickItemUpdate(-1)
+            }
+        }
     }
 
     private fun updateSlideProperties(slide: Slide?) {
@@ -97,8 +101,6 @@ class MainActivity : AppCompatActivity(), SlideListItemClickListener {
                 val hex = Integer.toHexString(it.backgroundColor)
                 binding.incRightMenu.etBackground.text = "0x${hex.uppercase()}"
             }
-
-            binding.incRightMenu.tvAlpha.text = it.alpha.toString()
         }
     }
 
@@ -111,6 +113,7 @@ class MainActivity : AppCompatActivity(), SlideListItemClickListener {
                     R.color.white
                 )
             )
+            slideAdapter.selectedPosition = -1
             binding.incRightMenu.etBackground.text = ""
             binding.incRightMenu.tvAlpha.text = ""
         }
