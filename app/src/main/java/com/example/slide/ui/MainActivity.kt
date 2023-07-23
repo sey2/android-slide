@@ -26,7 +26,7 @@ import com.example.slide.model.ImageSlide
 import com.example.slide.model.Slide
 import com.example.slide.model.SlideViewModel
 import com.example.slide.model.SquareSlide
-import com.example.slide.util.SlideColorUitl
+import com.example.slide.util.SlideColorUtil
 
 class MainActivity : AppCompatActivity(), SlideListItemClickListener {
 
@@ -119,7 +119,7 @@ class MainActivity : AppCompatActivity(), SlideListItemClickListener {
         }
 
         binding.incRightMenu.etBackground.setOnClickListener {
-            val color = SlideColorUitl.generateRandomColor()
+            val color = SlideColorUtil.generateRandomColor()
             val selectedSlideId = viewModel.selectedSlideId.value
 
             selectedSlideId?.let {
