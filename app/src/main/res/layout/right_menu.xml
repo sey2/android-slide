@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:background="@drawable/et_linear_alpha"
-            android:text="0"
+            android:text="@{viewModel.selectedSlide != null ? String.valueOf(viewModel.selectedSlide.alpha) : `0`}"
             android:textAlignment="center"
             android:textSize="25sp"
             app:layout_constraintEnd_toEndOf="@id/gl_end_end"
