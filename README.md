@@ -70,4 +70,14 @@ UDF 아키텍처 패턴에 맞게 코드를 수정
 - 서버에 데이터를 한번 받아온 상태에서 추가적으로 요청을 해도 Slide 객체는 추가되지 않음 (같은 UUID)를 가졌기 떄문
 ---
 ### 결과화면
-![ezgif com-video-to-gif](https://github.com/softeerbootcamp-2nd/android-slide/assets/54762273/153836a2-9f62-481e-b582-341507dce192)4)
+![결과](https://github.com/softeerbootcamp-2nd/android-slide/assets/54762273/26e33884-de8a-4956-96de-fc942ce89cc4)
+
+## (Step 4-2) 드로잉 표시하기
+- 드로잉 Slide를 표현해주기 위한 드로잉 클래스 선언
+- 슬라이드 추가 버튼을 누르면 (드로잉, 이미지, 사각형) 슬라이드 중 하나가 랜덤으로 생성
+- 드로잉 슬라이드를 처음에 추가하고 그린 이후에는 드로잉 자체를 변경할 순 없음 (선 색은 변경 가능)
+- 드로잉 슬라이드는 투명도를 처리하지 않음
+---
+### 결과화면
+![ezgif com-video-to-gif](https://github.com/softeerbootcamp-2nd/android-slide/assets/54762273/496bbf3c-1635-4f1a-beda-e30233eb438b)
+>>>>>>> d1948a4 ([Docs] 프로젝트 설명 추가 (07.24))
