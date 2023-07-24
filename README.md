@@ -67,7 +67,6 @@ UDF 아키텍처 패턴에 맞게 코드를 수정
 - 네트워크 요청은 SlideManager에서 이루어짐
 - 네트워크 요청 처리는 코루틴을 이용해 비동기 처리
 - 슬라이드가 추가되는 것을 확인하기 위해 리싸이클러뷰 아이템에 애니메이션 적용
-  <<<<<<< feature/drawing
 ---
 ### 결과화면
 ![결과](https://github.com/softeerbootcamp-2nd/android-slide/assets/54762273/26e33884-de8a-4956-96de-fc942ce89cc4)
@@ -80,5 +79,25 @@ UDF 아키텍처 패턴에 맞게 코드를 수정
 ---
 ### 결과화면
 ![ezgif com-video-to-gif](https://github.com/softeerbootcamp-2nd/android-slide/assets/54762273/496bbf3c-1635-4f1a-beda-e30233eb438b)
-- 서버에 데이터를 한번 받아온 상태에서 추가적으로 요청을 해도 Slide 객체는 추가되지 않음 (같은 UUID)를 가졌기 떄문
+
+## (Step 4-3) 상태 저장하기
+- 앱 실행 이후 생성한 모든 객체의 속성을 앱 종료시 속성들을 직렬화해서 저장
+  -> 슬라이드 불러오기 기능을 고려해 Room을 이용해 로컬 DB에 저장
+
+- Path 객체를 직렬화 / 역직렬화 하기 위해 커스텀 `TypeAdapter`를 구현
+
+- 로컬 DB 기능을 구현하기 위해 데이터 베이스 관련 클래스들 구현
+
+- 앱을 다시 실행하면 마지막 상태를 역직렬화해서 그대로 복원
+  -> Slide들의 위치를 기록해서 앱을 다시 실행해도 원래 위치 그대로 복원
+
+- 앱이 백그라운드로 들어갈 때, 전체 화면을 JPG 이미지로 저장해서 사진 앨범에 저장
+
+- 새 문서 작성하기 버튼을 누르면 로컬 DB에 있는 데이터와 현재 화면에 있는 Slide를 전부 삭제
+
 ---
+## 코드리뷰 내용 반영
+- 데이터 바인딩 코드로 전환
+
+### 결과화면
+![ezgif com-video-to-gif (1)](https://github.com/softeerbootcamp-2nd/android-slide/assets/54762273/b50a5dbe-82c1-4b47-9b73-1e8fe716b1dd)
