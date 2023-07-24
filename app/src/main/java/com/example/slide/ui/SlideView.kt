@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.RectF
 import android.graphics.drawable.BitmapDrawable
@@ -116,6 +117,21 @@ class SlideView(
         layoutParams.topToTop = R.id.board_view
         layoutParams.bottomToBottom = R.id.board_view
 
+        val slide = getSlide()
+
+        if(slide is ImageSlide){
+            bitmap?.let {
+                val scale = context.resources.displayMetrics.density
+                val padding = dpToPx(10)
+                layoutParams.height = ((it.height * scale).toInt() - 2 * padding)
+                layoutParams.width = ((it.width * scale).toInt() - 2 * padding)
+            }
+        } else if(slide is SquareSlide){
+            layoutParams.height = slide.sideLength
+            layoutParams.width = slide.sideLength
+        }
+
+
         this.layoutParams = layoutParams
     }
 
@@ -169,33 +185,36 @@ class SlideView(
 
     private fun drawImageSlide(slide: ImageSlide, canvas: Canvas?) {
         bitmap?.let {
-            val margin = dpToPx(10)
+            val padding = dpToPx(10) // padding of 10 dp
+            val maxDrawableWidth = width.toFloat() - 2 * padding
+            val maxDrawableHeight = height.toFloat() - 2 * padding
+
             val bitmapWidth = it.width.toFloat()
             val bitmapHeight = it.height.toFloat()
 
-            val maxDrawableWidth = width - 2 * margin
-            val maxDrawableHeight = height - 2 * margin
-
-            val (actualDrawableWidth, actualDrawableHeight) = if (bitmapWidth / bitmapHeight > maxDrawableWidth / maxDrawableHeight) {
-                maxDrawableWidth.toFloat() to bitmapHeight * (maxDrawableWidth / bitmapWidth)
+            val scale: Float = if (bitmapWidth / bitmapHeight > maxDrawableWidth / maxDrawableHeight) {
+                maxDrawableWidth / bitmapWidth
             } else {
-                bitmapWidth * (maxDrawableHeight / bitmapHeight) to maxDrawableHeight.toFloat()
+                maxDrawableHeight / bitmapHeight
             }
 
-            val left = (width - actualDrawableWidth) / 2
-            val top = margin
+            val outWidth = scale * bitmapWidth
+            val outHeight = scale * bitmapHeight
+            val left = (width - outWidth) / 2
+            val top = (height - outHeight) / 2
 
             imagePaint.alpha = (slide.alpha * 10 * 255) / 100
-            val dstRect =
-                RectF(left, top.toFloat(), left + actualDrawableWidth, top + actualDrawableHeight)
-            canvas?.drawBitmap(it, null, dstRect, imagePaint)
 
-            val borderRect = RectF(dstRect)
-            borderRect.inset((-margin).toFloat(), (-margin).toFloat())
+            val matrix = Matrix()
+            matrix.postScale(scale, scale)
+            matrix.postTranslate(left, top)
 
+            canvas?.drawBitmap(it, matrix, imagePaint)
+
+            // Increase the border size by 10dp
+            val borderRect = RectF(0f, 0f, width.toFloat(), height.toFloat())
             canvas?.drawRect(borderRect, strokePaint)
         }
-
     }
 
     private fun drawSquareSlide(slide: SquareSlide, canvas: Canvas?) {
