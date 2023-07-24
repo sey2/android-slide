@@ -61,3 +61,12 @@ UDF 아키텍처 패턴에 맞게 코드를 수정
 ---
 ### 결과화면
 ![ezgif com-video-to-gif](https://github.com/softeerbootcamp-2nd/android-slide/assets/54762273/8064f12e-e7fe-4438-a556-6d351f39d8ff)
+
+## (Step 4-1) 슬라이드 불러오기
+- Retrofit 라이브러리를 이용해 서버에서 데이터를 가져와 Slide를 추가하는 기능
+- 네트워크 요청은 SlideManager에서 이루어짐
+- 네트워크 요청 처리는 코루틴을 이용해 비동기 처리
+- 슬라이드가 추가되는 것을 확인하기 위해 리싸이클러뷰 아이템에 애니메이션 적용
+---
+### 결과화면
+![결과](https://github.com/softeerbootcamp-2nd/android-slide/assets/54762273/26e33884-de8a-4956-96de-fc942ce89cc4)
