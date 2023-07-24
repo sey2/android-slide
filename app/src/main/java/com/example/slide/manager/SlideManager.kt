@@ -1,5 +1,6 @@
 package com.example.slide.manager
 
+import DrawingSlide
 import android.graphics.Color
 import com.example.slide.factory.SlideCreationFactory
 import com.example.slide.model.ImageSlide
@@ -34,15 +35,20 @@ class SlideManager {
     fun getSlideData(slide: Slide): Slide = slides[slides.indexOf(slide)]
 
     fun addSlide() {
-        if (Random.nextBoolean()) {
-            slides.add(SlideCreationFactory.createSquareSlide(213))
-        } else {
-            slides.add(SlideCreationFactory.createImageSlide(213))
+        when (Random.nextInt(3)) {
+            0 -> slides.add(SlideCreationFactory.createSquareSlide(213))
+            1 -> slides.add(SlideCreationFactory.createImageSlide(213))
+            2 -> slides.add(SlideCreationFactory.createDrawingSlide(213))
         }
     }
 
     fun changeColor(slide: Slide, color: Int) {
-        (slides.getOrNull(findSlideIndex(slide)) as SquareSlide)?.backgroundColor = color
+        if(slide is SquareSlide) {
+            (slides.getOrNull(findSlideIndex(slide)) as SquareSlide).backgroundColor = color
+        }else if(slide is DrawingSlide){
+            (slides.getOrNull(findSlideIndex(slide)) as DrawingSlide).paint.color = color
+        }
+
     }
 
     fun changImgByteArr(slide: Slide, newImageBytes: ByteArray) {
@@ -53,7 +59,9 @@ class SlideManager {
     }
 
     fun changeAlpha(slide: Slide, alpha: Int) {
-        slides.getOrNull(findSlideIndex(slide))?.alpha = alpha
+        if(slide !is DrawingSlide) {
+            slides.getOrNull(findSlideIndex(slide))?.alpha = alpha
+        }
     }
 
     private fun findSlideIndex(slide: Slide) = slides.indexOf(slide)

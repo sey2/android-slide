@@ -1,5 +1,6 @@
 package com.example.slide.ui
 
+import DrawingSlide
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
@@ -81,7 +82,7 @@ class MainActivity : AppCompatActivity(), SlideListItemClickListener {
 
         viewModel.slides.observe(this) { slides ->
             slides?.forEach { slide ->
-                if(!slideAdapter.itemList.any {it.id == slide.id}){
+                if (!slideAdapter.itemList.any { it.id == slide.id }) {
                     slideAdapter.addItem(slide)
                     updateSlideProperties(viewModel.selectedSlide.value)
                     makeSlideView(slide)
@@ -100,12 +101,19 @@ class MainActivity : AppCompatActivity(), SlideListItemClickListener {
 
     private fun updateSlideProperties(slide: Slide?) {
         slide?.let {
-            if (it is SquareSlide) {
-                binding.incRightMenu.etBackground.setBackgroundColor(it.backgroundColor)
-                val hex = Integer.toHexString(it.backgroundColor)
-                binding.incRightMenu.etBackground.text = "0x${hex.uppercase()}"
+            val color = when (it) {
+                is SquareSlide -> it.backgroundColor
+                is DrawingSlide -> it.paint.color
+                else -> return
             }
+            updateColor(color)
         }
+    }
+
+    private fun updateColor(color: Int) {
+        binding.incRightMenu.etBackground.setBackgroundColor(color)
+        val hex = Integer.toHexString(color)
+        binding.incRightMenu.etBackground.text = "0x${hex.uppercase()}"
     }
 
     private fun initListeners() {
@@ -189,21 +197,22 @@ class MainActivity : AppCompatActivity(), SlideListItemClickListener {
     }
 
     private fun updateBackgroundColor(color: Int) {
-        val slide = viewModel.selectedSlide.value
 
-        if (slide is SquareSlide) {
-            viewModel.processAction(SlideAction.ChangeColor(color))
-            binding.incRightMenu.etBackground.setBackgroundColor(color)
-            val hex = Integer.toHexString(color)
-            binding.incRightMenu.etBackground.text = "0x${hex.uppercase()}"
-        } else {
-            if (slide is ImageSlide) {
-                binding.incRightMenu.etBackground.setBackgroundColor(whiteColor)
+        when (viewModel.selectedSlide.value) {
+            is SquareSlide, is DrawingSlide -> {
+                viewModel.processAction(SlideAction.ChangeColor(color))
+                binding.incRightMenu.etBackground.setBackgroundColor(color)
                 val hex = Integer.toHexString(color)
+                binding.incRightMenu.etBackground.text = "0x${hex.uppercase()}"
+            }
+
+            is ImageSlide -> {
+                binding.incRightMenu.etBackground.setBackgroundColor(whiteColor)
                 binding.incRightMenu.etBackground.text = ""
             }
         }
     }
+
 
     private fun updateAlpha(value: Int) {
         val selectedSlide = viewModel.selectedSlide.value
