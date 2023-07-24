@@ -8,9 +8,6 @@ import com.example.slide.model.SquareSlide
 import com.example.slide.network.SlideService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.net.URL

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.slide.R
 import com.example.slide.action.SlideAction
+import com.example.slide.adapter.SlideInLeftAnimator
 import com.example.slide.adapter.SlideListAdapter
 import com.example.slide.databinding.ActivityMainBinding
 import com.example.slide.factory.SlideViewModelFactory
@@ -168,6 +169,7 @@ class MainActivity : AppCompatActivity(), SlideListItemClickListener {
         slideAdapter = SlideListAdapter(mutableListOf(), this)
         binding.incSlideList.rvSlide.layoutManager = LinearLayoutManager(this)
         binding.incSlideList.rvSlide.adapter = slideAdapter
+        binding.incSlideList.rvSlide.itemAnimator = SlideInLeftAnimator()
 
         val callback = SlideMoveCallListener(slideAdapter)
         val touchHelper = ItemTouchHelper(callback)
