@@ -158,7 +158,12 @@ class MainActivity : AppCompatActivity(), SlideListItemClickListener {
     }
 
     private fun makeSlideView(newSlide: Slide) {
-        val slideView = SlideView(this, null, newSlide.id, viewModel)
+        val slideView = when (newSlide) {
+            is ImageSlide -> ImageBaseSlideView(this, newSlide.id, viewModel)
+            is SquareSlide -> SquareBaseSlideView(this, newSlide.id, viewModel)
+            is DrawingSlide -> DrawingBaseSlideView(this,  newSlide.id, viewModel)
+            else -> throw IllegalArgumentException("Unknown slide type")
+        }
 
         if (newSlide is ImageSlide) {
             slideView.slideViewListener = object : SlideViewListener {

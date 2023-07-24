@@ -10,8 +10,4 @@ object SlideColorUtil {
         val blue = Random.nextInt(256)
         return Color.rgb(red, green, blue)
     }
-
-    fun convertIntToArgb(color: Int, alpha: Int): Int{
-        return Color.argb(alpha, Color.red(color), Color.green(color), Color.blue(color))
-    }
 }
