@@ -156,11 +156,11 @@ class MainActivity : AppCompatActivity(), SlideListItemClickListener {
             binding.incRightMenu.tvAlpha.text = ""
         }
 
-//        binding.incRightMenu.btnNewDoc.setOnClickListener {
-//            viewModel.processAction(SlideAction.ClearAllSlide)
-//            slideAdapter.clearItem()
-//            binding.boardView.removeAllViews()
-//        }
+        binding.incRightMenu.btnNewDoc.setOnClickListener {
+            viewModel.processAction(SlideAction.ClearAllSlide)
+            slideAdapter.clearItem()
+            binding.boardView.removeAllViews()
+        }
     }
 
     private fun makeSlideView(newSlide: Slide) {
