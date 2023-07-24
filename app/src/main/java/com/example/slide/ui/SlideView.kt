@@ -96,6 +96,7 @@ class SlideView(
                     0,
                     slide.imageBytes!!.size
                 )
+                setupLayoutParams()
             }
             invalidate()
         }

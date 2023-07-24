@@ -67,6 +67,7 @@ UDF 아키텍처 패턴에 맞게 코드를 수정
 - 네트워크 요청은 SlideManager에서 이루어짐
 - 네트워크 요청 처리는 코루틴을 이용해 비동기 처리
 - 슬라이드가 추가되는 것을 확인하기 위해 리싸이클러뷰 아이템에 애니메이션 적용
+- 서버에 데이터를 한번 받아온 상태에서 추가적으로 요청을 해도 Slide 객체는 추가되지 않음 (같은 UUID)를 가졌기 떄문
 ---
 ### 결과화면
-![결과](https://github.com/softeerbootcamp-2nd/android-slide/assets/54762273/26e33884-de8a-4956-96de-fc942ce89cc4)
+![ezgif com-video-to-gif](https://github.com/softeerbootcamp-2nd/android-slide/assets/54762273/153836a2-9f62-481e-b582-341507dce192)4)
