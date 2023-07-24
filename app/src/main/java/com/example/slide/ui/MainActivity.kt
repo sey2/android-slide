@@ -79,9 +79,12 @@ class MainActivity : AppCompatActivity(), SlideListItemClickListener {
         }
 
         viewModel.slides.observe(this) { slides ->
-            slides?.let {
-                slideAdapter.setItems(it)
-                updateSlideProperties(viewModel.selectedSlide.value)
+            slides?.forEach { slide ->
+                if(!slideAdapter.itemList.any {it.id == slide.id}){
+                    slideAdapter.addItem(slide)
+                    updateSlideProperties(viewModel.selectedSlide.value)
+                    makeSlideView(slide)
+                }
             }
         }
 
@@ -137,8 +140,11 @@ class MainActivity : AppCompatActivity(), SlideListItemClickListener {
 
         binding.incSlideList.btnAddSlide.setOnClickListener {
             viewModel.processAction(SlideAction.AddSlide)
-            val newSlide = viewModel.slides.value?.last()
-            newSlide?.let { makeSlideView(it) }
+        }
+
+        binding.incSlideList.btnAddSlide.setOnLongClickListener {
+            viewModel.processAction(SlideAction.AddSlideFromServer)
+            true
         }
     }
 

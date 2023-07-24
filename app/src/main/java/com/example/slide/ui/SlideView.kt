@@ -27,7 +27,7 @@ import com.example.slide.model.SquareSlide
 class SlideView(
     context: Context,
     attrs: AttributeSet?,
-    private val svId: String,
+    public val svId: String,
     private val viewModel: SlideViewModel
 ) : View(context, attrs) {
     companion object {

@@ -11,4 +11,5 @@ sealed class SlideAction {
     object ChangeSelectedIndex: SlideAction()
     object AddSlide : SlideAction()
     object ClearSelectedSlide : SlideAction()
+    object AddSlideFromServer : SlideAction()
 }

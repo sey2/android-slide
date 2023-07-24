@@ -3,8 +3,10 @@ package com.example.slide.model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.slide.action.SlideAction
 import com.example.slide.manager.SlideManager
+import kotlinx.coroutines.launch
 
 class SlideViewModel(private val slideManager: SlideManager) : ViewModel() {
     private val _slides = MutableLiveData<List<Slide>>()
@@ -29,6 +31,7 @@ class SlideViewModel(private val slideManager: SlideManager) : ViewModel() {
             is SlideAction.SetSlides -> setSlides(action.slides)
             is SlideAction.ClearSelectedSlide -> clearSelectedSlide()
             is SlideAction.ChangeSelectedIndex -> changeSelectedIndex()
+            is SlideAction.AddSlideFromServer -> addSlideFromServer()
         }
     }
 
@@ -73,6 +76,11 @@ class SlideViewModel(private val slideManager: SlideManager) : ViewModel() {
 
         slideManager.changeAlpha(selectedSlide, alpha)
         _selectedSlide.value = slideManager.getSlideData(selectedSlide)
+        _slides.value = slideManager.getSlides()
+    }
+
+    private fun addSlideFromServer() = viewModelScope.launch {
+        slideManager.addSlideFromServer()
         _slides.value = slideManager.getSlides()
     }
 
