@@ -1,4 +1,4 @@
-package com.example.slide.view
+package com.example.slide.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
