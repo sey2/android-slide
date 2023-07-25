@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.slide.adapter.SlideListAdapter
 
-class SlideMoveCallback(private val adapter: SlideListAdapter): ItemTouchHelper.Callback() {
+class SlideMoveCallListener(private val adapter: SlideListAdapter): ItemTouchHelper.Callback() {
 
     override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
         val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN
