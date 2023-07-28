@@ -38,7 +38,9 @@
             android:inputType="text"
             android:textColor="@color/black"
             android:textSize="12sp"
-            android:backgroundTint="@color/white"
+            android:onClick="@{() -> viewModel.onBackgroundColorButtonClicked()}"
+            app:backgroundTint="@{viewModel.selectedSlide}"
+            app:btnBackText="@{viewModel.selectedSlide}"
             app:cornerRadius="5dp"
             app:layout_constraintEnd_toEndOf="@id/gl_end_end"
             app:layout_constraintStart_toStartOf="@+id/gl_end_start"
@@ -79,6 +81,7 @@
             android:background="@drawable/tv_linear_plus"
             android:gravity="center"
             android:text="-"
+            android:onClick="@{() -> viewModel.onAlphaMinusButtonClicked()}"
             android:textColor="@color/black"
             android:textSize="15sp"
             app:cornerRadius="3dp" />
@@ -97,6 +100,7 @@
             android:layout_marginStart="8dp"
             android:background="@drawable/tv_linear_minus"
             android:gravity="center"
+            android:onClick="@{() -> viewModel.onAlphaPlusButtonClicked()}"
             android:text="+"
             android:textColor="@color/black"
             android:textSize="15sp" />
@@ -133,6 +137,18 @@
             android:orientation="vertical"
             app:layout_constraintGuide_begin="6dp"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/btn_new_doc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="168dp"
+            android:backgroundTint="@color/purple_200"
+            android:text="새 문서 작성하기"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.452"
+            app:layout_constraintStart_toStartOf="@+id/gl_end_start"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -25,6 +25,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.button.MaterialButton
+            style="@style/slidePlusBtnStyle"
             android:id="@+id/btn_add_slide"
             style="@style/slidePlusBtnStyle"
             android:layout_width="0dp"
