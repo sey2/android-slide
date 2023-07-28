@@ -1,11 +1,14 @@
 package com.example.slide.model
 
+import DrawingSlide
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.slide.action.SlideAction
 import com.example.slide.manager.SlideManager
+import com.example.slide.util.SlideColorUtil
 import kotlinx.coroutines.launch
 
 class SlideViewModel(private val slideManager: SlideManager) : ViewModel() {
@@ -20,18 +23,25 @@ class SlideViewModel(private val slideManager: SlideManager) : ViewModel() {
 
     private val _selectedSlideIndex = MutableLiveData<Int?>()
     val selectedSlideIndex: LiveData<Int?> = _selectedSlideIndex
-
     fun processAction(action: SlideAction) {
         when (action) {
             is SlideAction.SelectSlide -> selectSlide(action.id)
             is SlideAction.ChangeImage -> changeImgByteArr(action.slide, action.newImageBytes)
-            is SlideAction.AddSlide -> addSlide()
-            is SlideAction.ChangeColor -> changeColor(action.color)
-            is SlideAction.ChangeAlpha -> changeAlpha(action.alpha)
             is SlideAction.SetSlides -> setSlides(action.slides)
             is SlideAction.ClearSelectedSlide -> clearSelectedSlide()
             is SlideAction.ChangeSelectedIndex -> changeSelectedIndex()
-            is SlideAction.AddSlideFromServer -> addSlideFromServer()
+            is SlideAction.ClearAllSlide -> clearAllSlide()
+        }
+    }
+
+    fun saveSlidesState() {
+        slideManager.saveSlidesState()
+    }
+
+    fun loadSlidesState() {
+        viewModelScope.launch {
+            slideManager.loadSlidesState()
+            _slides.value = slideManager.getSlides()
         }
     }
 
@@ -56,11 +66,6 @@ class SlideViewModel(private val slideManager: SlideManager) : ViewModel() {
         _slides.value = slideManager.getSlides()
     }
 
-    private fun addSlide() {
-        slideManager.addSlide()
-        _slides.value = slideManager.getSlides()
-    }
-
     private fun changeColor(color: Int) {
         val selectedSlide = _selectedSlide.value ?: return
 
@@ -79,9 +84,13 @@ class SlideViewModel(private val slideManager: SlideManager) : ViewModel() {
         _slides.value = slideManager.getSlides()
     }
 
-    private fun addSlideFromServer() = viewModelScope.launch {
-        slideManager.addSlideFromServer()
-        _slides.value = slideManager.getSlides()
+    fun onAddButtonLongClicked(): Boolean {
+        Log.d("Test", "Clicked")
+        viewModelScope.launch {
+            slideManager.addSlideFromServer()
+            _slides.value = slideManager.getSlides()
+        }
+        return true
     }
 
     fun setSlides(list: List<Slide>) {
@@ -93,5 +102,34 @@ class SlideViewModel(private val slideManager: SlideManager) : ViewModel() {
         _selectedSlideId.value = null
         _selectedSlide.value = null
     }
-}
 
+    private fun clearAllSlide() {
+        slideManager.clearDatabase()
+        _slides.value = slideManager.getSlides()
+    }
+
+    fun onBackgroundColorButtonClicked() {
+        val color = SlideColorUtil.generateRandomColor()
+        val selectedSlideId = selectedSlideId.value
+
+        selectedSlideId?.let {
+            when (selectedSlide.value) {
+                is SquareSlide, is DrawingSlide -> {
+                    changeColor(color)
+                }
+            }
+        }
+    }
+
+    fun onAlphaPlusButtonClicked() {
+        changeAlpha(selectedSlide.value!!.alpha + 1)
+    }
+    fun onAlphaMinusButtonClicked() {
+        changeAlpha(selectedSlide.value!!.alpha - 1)
+    }
+
+    fun onAddButtonClicked() {
+        slideManager.addSlide()
+        _slides.value = slideManager.getSlides()
+    }
+}

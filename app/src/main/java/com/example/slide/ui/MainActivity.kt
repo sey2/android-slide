@@ -2,10 +2,17 @@ package com.example.slide.ui
 
 import DrawingSlide
 import android.app.Activity
+import android.content.ContentValues
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
+import android.view.View
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -28,7 +35,7 @@ import com.example.slide.model.ImageSlide
 import com.example.slide.model.Slide
 import com.example.slide.model.SlideViewModel
 import com.example.slide.model.SquareSlide
-import com.example.slide.util.SlideColorUtil
+import java.io.OutputStream
 
 class MainActivity : AppCompatActivity(), SlideListItemClickListener {
 
@@ -36,8 +43,6 @@ class MainActivity : AppCompatActivity(), SlideListItemClickListener {
     private lateinit var viewModel: SlideViewModel
     private lateinit var slideAdapter: SlideListAdapter
     private val getImageResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult(), ::handleImageResult)
-    private val whiteColor = 255
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
@@ -45,6 +50,49 @@ class MainActivity : AppCompatActivity(), SlideListItemClickListener {
         initListeners()
         initRecyclerView()
         initViewModel()
+
+        viewModel.loadSlidesState()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.saveSlidesState()
+
+        val rootView = window.decorView.rootView
+        val bitmap = getBitmapFromView(rootView)
+
+        saveBitmap(bitmap)
+    }
+    private fun getBitmapFromView(view: View): Bitmap {
+        val returnedBitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(returnedBitmap)
+        val bgDrawable = view.background
+        if (bgDrawable != null) {
+            bgDrawable.draw(canvas)
+        } else {
+            canvas.drawColor(Color.WHITE)
+        }
+        view.draw(canvas)
+        return returnedBitmap
+    }
+
+    private fun saveBitmap(bitmap: Bitmap) {
+        val contentValues = ContentValues().apply {
+            put(MediaStore.MediaColumns.DISPLAY_NAME, "screenshot.jpg")
+            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpg")
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
+            }
+        }
+
+        val uri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+
+        uri?.let {
+            val outputStream: OutputStream? = contentResolver.openOutputStream(it)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+            outputStream?.flush()
+            outputStream?.close()
+        }
     }
 
     private fun handleImageResult(result: ActivityResult) {
@@ -65,6 +113,7 @@ class MainActivity : AppCompatActivity(), SlideListItemClickListener {
             }
         }
     }
+
     private fun initViewModel() {
         viewModel = ViewModelProvider(
             this,
@@ -73,18 +122,12 @@ class MainActivity : AppCompatActivity(), SlideListItemClickListener {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
         binding.incRightMenu.viewModel = viewModel
-
-        viewModel.selectedSlide.observe(this) { slide ->
-            slide?.let {
-                updateSlideProperties(slide)
-            }
-        }
+        binding.incSlideList.viewModel = viewModel
 
         viewModel.slides.observe(this) { slides ->
             slides?.forEach { slide ->
                 if (!slideAdapter.itemList.any { it.id == slide.id }) {
                     slideAdapter.addItem(slide)
-                    updateSlideProperties(viewModel.selectedSlide.value)
                     makeSlideView(slide)
                 }
             }
@@ -97,23 +140,6 @@ class MainActivity : AppCompatActivity(), SlideListItemClickListener {
                 slideAdapter.slideClickItemUpdate(-1)
             }
         }
-    }
-
-    private fun updateSlideProperties(slide: Slide?) {
-        slide?.let {
-            val color = when (it) {
-                is SquareSlide -> it.backgroundColor
-                is DrawingSlide -> it.paint.color
-                else -> return
-            }
-            updateColor(color)
-        }
-    }
-
-    private fun updateColor(color: Int) {
-        binding.incRightMenu.etBackground.setBackgroundColor(color)
-        val hex = Integer.toHexString(color)
-        binding.incRightMenu.etBackground.text = "0x${hex.uppercase()}"
     }
 
     private fun initListeners() {
@@ -130,31 +156,11 @@ class MainActivity : AppCompatActivity(), SlideListItemClickListener {
             binding.incRightMenu.tvAlpha.text = ""
         }
 
-        binding.incRightMenu.etBackground.setOnClickListener {
-            val color = SlideColorUtil.generateRandomColor()
-            val selectedSlideId = viewModel.selectedSlideId.value
-
-            selectedSlideId?.let {
-                updateBackgroundColor(color)
-            }
-        }
-
-        binding.incRightMenu.tvPlus.setOnClickListener {
-            updateAlpha(1)
-        }
-
-        binding.incRightMenu.tvMinus.setOnClickListener {
-            updateAlpha(-1)
-        }
-
-        binding.incSlideList.btnAddSlide.setOnClickListener {
-            viewModel.processAction(SlideAction.AddSlide)
-        }
-
-        binding.incSlideList.btnAddSlide.setOnLongClickListener {
-            viewModel.processAction(SlideAction.AddSlideFromServer)
-            true
-        }
+//        binding.incRightMenu.btnNewDoc.setOnClickListener {
+//            viewModel.processAction(SlideAction.ClearAllSlide)
+//            slideAdapter.clearItem()
+//            binding.boardView.removeAllViews()
+//        }
     }
 
     private fun makeSlideView(newSlide: Slide) {
@@ -198,32 +204,6 @@ class MainActivity : AppCompatActivity(), SlideListItemClickListener {
         } else {
             viewModel.selectSlide(slideIndex)
             viewModel.selectSlide(selectedId)
-        }
-    }
-
-    private fun updateBackgroundColor(color: Int) {
-
-        when (viewModel.selectedSlide.value) {
-            is SquareSlide, is DrawingSlide -> {
-                viewModel.processAction(SlideAction.ChangeColor(color))
-                binding.incRightMenu.etBackground.setBackgroundColor(color)
-                val hex = Integer.toHexString(color)
-                binding.incRightMenu.etBackground.text = "0x${hex.uppercase()}"
-            }
-
-            is ImageSlide -> {
-                binding.incRightMenu.etBackground.setBackgroundColor(whiteColor)
-                binding.incRightMenu.etBackground.text = ""
-            }
-        }
-    }
-
-
-    private fun updateAlpha(value: Int) {
-        val selectedSlide = viewModel.selectedSlide.value
-
-        selectedSlide?.let {
-            viewModel.processAction(SlideAction.ChangeAlpha(selectedSlide.alpha + value))
         }
     }
 
