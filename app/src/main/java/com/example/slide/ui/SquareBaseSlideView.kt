@@ -3,7 +3,6 @@ package com.example.slide.ui
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
-import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -19,14 +18,19 @@ class SquareBaseSlideView(
 ) : BaseSlideView(context, svId, viewModel) {
 
     override fun setupLayoutParams() {
-        val slide = getSlide()
+        val slide = getSlide()!!
         val sizeInPixels = dpToPx(DEFAULT_DP_SIZE)
         val layoutParams = ConstraintLayout.LayoutParams(sizeInPixels, sizeInPixels)
 
-        layoutParams.startToStart = R.id.board_view
-        layoutParams.endToEnd = R.id.board_view
-        layoutParams.topToTop = R.id.board_view
-        layoutParams.bottomToBottom = R.id.board_view
+        if (slide.lastPosition.first == 0f && slide.lastPosition.second == 0f) {
+            layoutParams.startToStart = R.id.board_view
+            layoutParams.endToEnd = R.id.board_view
+            layoutParams.topToTop = R.id.board_view
+            layoutParams.bottomToBottom = R.id.board_view
+        } else {
+            this.x = slide.lastPosition.first
+            this.y = slide.lastPosition.second
+        }
 
         layoutParams.height = slide!!.sideLength
         layoutParams.width = slide.sideLength
@@ -35,31 +39,7 @@ class SquareBaseSlideView(
     }
 
     override fun handleTouch(view: View, motionEvent: MotionEvent) {
-        when (motionEvent.action) {
-            MotionEvent.ACTION_DOWN -> {
-                dX = view.x - motionEvent.rawX
-                dY = view.y - motionEvent.rawY
-            }
-
-            MotionEvent.ACTION_MOVE -> {
-                view.animate()
-                    .x(motionEvent.rawX + dX)
-                    .y(motionEvent.rawY + dY)
-                    .setDuration(0)
-                    .start()
-            }
-
-            MotionEvent.ACTION_UP -> {
-                val clickTime = System.currentTimeMillis()
-                if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_THRESHOLD) { // Double click
-                    slideViewListener?.onSlideDoubleClicked(svId)
-                } else { // Single click
-                    isSelected = !isSelected
-                    viewModel.processAction(SlideAction.SelectSlide(svId))
-                }
-                lastClickTime = clickTime
-            }
-        }
+        handleMovement(view, motionEvent)
     }
 
     override fun drawSlide(slide: Any, canvas: Canvas?) {

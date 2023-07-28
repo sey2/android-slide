@@ -1,9 +1,9 @@
 package com.example.slide.ui
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -23,6 +23,7 @@ abstract class BaseSlideView(
     companion object {
         const val DEFAULT_DP_SIZE = 150
         const val DOUBLE_CLICK_TIME_THRESHOLD = 200
+        const val DEFAULT_STROKE_WIDTH = 5f
     }
 
     private val selectedStrokeWidth: Float = resources.getDimension(R.dimen.selected_stroke_width)
@@ -35,9 +36,9 @@ abstract class BaseSlideView(
     protected val fillPaint: Paint =
         createPaint(style = Paint.Style.FILL, color = defaultStrokeColor)
 
-    protected var dX = 0f
-    protected var dY = 0f
-    protected var lastClickTime = 0L
+    private var dX = 0f
+    private var dY = 0f
+    private var lastClickTime = 0L
     var slideViewListener: SlideViewListener? = null
 
     protected fun getSlide() = viewModel.slides.value?.find { it.id == svId }
@@ -90,6 +91,7 @@ abstract class BaseSlideView(
         })
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun setupOnTouchListener() {
         setOnTouchListener { view, motionEvent ->
             handleTouch(view, motionEvent)
@@ -109,6 +111,36 @@ abstract class BaseSlideView(
         }
 
         getSlide()?.let { drawSlide(it, canvas) }
+    }
+
+    protected open fun handleMovement(view: View, motionEvent: MotionEvent) {
+        val slide = getSlide()
+        when (motionEvent.action) {
+            MotionEvent.ACTION_DOWN -> {
+                dX = view.x - motionEvent.rawX
+                dY = view.y - motionEvent.rawY
+            }
+
+            MotionEvent.ACTION_MOVE -> {
+                view.animate()
+                    .x(motionEvent.rawX + dX)
+                    .y(motionEvent.rawY + dY)
+                    .setDuration(0)
+                    .start()
+            }
+
+            MotionEvent.ACTION_UP -> {
+                val clickTime = System.currentTimeMillis()
+                if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_THRESHOLD) { // Double click
+                    slideViewListener?.onSlideDoubleClicked(svId)
+                } else { // Single click
+                    isSelected = !isSelected
+                    viewModel.processAction(SlideAction.SelectSlide(svId))
+                }
+                lastClickTime = clickTime
+                slide!!.lastPosition = Pair(view.x, view.y)
+            }
+        }
     }
 
     protected fun dpToPx(dp: Int = DEFAULT_DP_SIZE): Int {

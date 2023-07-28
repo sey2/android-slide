@@ -26,11 +26,17 @@ class ImageBaseSlideView(
     override fun setupLayoutParams() {
         val sizeInPixels = dpToPx(DEFAULT_DP_SIZE)
         val layoutParams = ConstraintLayout.LayoutParams(sizeInPixels, sizeInPixels)
+        val slide = getSlide()!!
 
-        layoutParams.startToStart = R.id.board_view
-        layoutParams.endToEnd = R.id.board_view
-        layoutParams.topToTop = R.id.board_view
-        layoutParams.bottomToBottom = R.id.board_view
+        if (slide.lastPosition.first == 0f && slide.lastPosition.second == 0f) {
+            layoutParams.startToStart = R.id.board_view
+            layoutParams.endToEnd = R.id.board_view
+            layoutParams.topToTop = R.id.board_view
+            layoutParams.bottomToBottom = R.id.board_view
+        } else {
+            this.x = slide.lastPosition.first
+            this.y = slide.lastPosition.second
+        }
 
         bitmap?.let {
             val scale = context.resources.displayMetrics.density
@@ -43,31 +49,7 @@ class ImageBaseSlideView(
     }
 
     override fun handleTouch(view: View, motionEvent: MotionEvent) {
-        when (motionEvent.action) {
-            MotionEvent.ACTION_DOWN -> {
-                dX = view.x - motionEvent.rawX
-                dY = view.y - motionEvent.rawY
-            }
-
-            MotionEvent.ACTION_MOVE -> {
-                view.animate()
-                    .x(motionEvent.rawX + dX)
-                    .y(motionEvent.rawY + dY)
-                    .setDuration(0)
-                    .start()
-            }
-
-            MotionEvent.ACTION_UP -> {
-                val clickTime = System.currentTimeMillis()
-                if (clickTime - lastClickTime < BaseSlideView.DOUBLE_CLICK_TIME_THRESHOLD) { // Double click
-                    slideViewListener?.onSlideDoubleClicked(svId)
-                } else { // Single click
-                    isSelected = !isSelected
-                    viewModel.processAction(SlideAction.SelectSlide(svId))
-                }
-                lastClickTime = clickTime
-            }
-        }
+        handleMovement(view, motionEvent)
     }
 
     override fun drawSlide(slide: Any, canvas: Canvas?) {
