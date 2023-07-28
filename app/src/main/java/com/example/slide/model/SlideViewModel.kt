@@ -24,23 +24,23 @@ class SlideViewModel(private val slideManager: SlideManager) : ViewModel() {
     private val _selectedSlideIndex = MutableLiveData<Int?>()
     val selectedSlideIndex: LiveData<Int?> = _selectedSlideIndex
     fun processAction(action: SlideAction) {
-        when (action) {
-            is SlideAction.SelectSlide -> selectSlide(action.id)
-            is SlideAction.ChangeImage -> changeImgByteArr(action.slide, action.newImageBytes)
-            is SlideAction.SetSlides -> setSlides(action.slides)
-            is SlideAction.ClearSelectedSlide -> clearSelectedSlide()
-            is SlideAction.ChangeSelectedIndex -> changeSelectedIndex()
-            is SlideAction.ClearAllSlide -> clearAllSlide()
-        }
+//        when (action) {
+//            is SlideAction.SelectSlide -> selectSlide(action.id)
+//            is SlideAction.ChangeImage -> changeImgByteArr(action.slide, action.newImageBytes)
+//            is SlideAction.SetSlides -> setSlides(action.slides)
+//            is SlideAction.ClearSelectedSlide -> clearSelectedSlide()
+//            is SlideAction.ChangeSelectedIndex -> changeSelectedIndex()
+//            // is SlideAction.ClearAllSlide -> clearAllSlide()
+//        }
     }
 
     fun saveSlidesState() {
-        slideManager.saveSlidesState()
+       // slideManager.saveSlidesState()
     }
 
     fun loadSlidesState() {
         viewModelScope.launch {
-            slideManager.loadSlidesState()
+         //   slideManager.loadSlidesState()
             _slides.value = slideManager.getSlides()
         }
     }
@@ -104,7 +104,7 @@ class SlideViewModel(private val slideManager: SlideManager) : ViewModel() {
     }
 
     private fun clearAllSlide() {
-        slideManager.clearDatabase()
+//        slideManager.clearDatabase()
         _slides.value = slideManager.getSlides()
     }
 
