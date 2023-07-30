@@ -1,6 +1,7 @@
 package com.example.slide.network
 
 import android.graphics.Color
+import android.util.Log
 import com.example.slide.BuildConfig
 import com.example.slide.model.ImageSlide
 import com.example.slide.model.Slide
@@ -37,7 +38,7 @@ class SlideRemoteSource {
                         ImageSlide(slideData.id, 0, slideData.alpha, imageBytes)
                     }
                     "Square" -> {
-                        val color = slideData.color.let { Color.rgb(it.R, it.G, it.B) }
+                        val color = slideData.color.let { Color.rgb(it.r, it.g, it.b) }
                         SquareSlide(slideData.id, slideData.size, color, slideData.alpha)
                     }
                     else -> throw IllegalArgumentException("Unknown slide type: ${slideData.type}")
