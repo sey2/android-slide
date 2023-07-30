@@ -17,7 +17,6 @@ class SlideListAdapter(
 ) :
     RecyclerView.Adapter<SlideListAdapter.SlideListViewHolder>() {
     var selectedPosition: Int = -1
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SlideListViewHolder {
         val binding =
             DataBindingUtil.inflate<SlideItemBinding>(
@@ -27,12 +26,17 @@ class SlideListAdapter(
                 false
             )
 
-        return SlideListViewHolder(binding).apply {
-            itemView.setOnClickListener {
-                updatePosition(adapterPosition)
-                onSlideClickListener.onItemClick(adapterPosition, this)
-            }
+        val holder = SlideListViewHolder(binding)
+
+        holder.popupMenu = PopupMenu(holder.itemView.context, holder.itemView).apply {
+            menuInflater.inflate(R.menu.context_menu, menu)
         }
+
+        holder.itemView.setOnClickListener {
+            updatePosition(holder.adapterPosition)
+            onSlideClickListener.onItemClick(holder.adapterPosition, holder)
+        }
+            return holder
     }
 
     fun addItem(item: Slide) {
@@ -65,32 +69,32 @@ class SlideListAdapter(
     inner class SlideListViewHolder(private val binding: SlideItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        lateinit var popupMenu: PopupMenu
+
         init {
-            binding.itemRoot.setOnLongClickListener { view ->
-                PopupMenu(view.context, view).apply {
-                    menuInflater.inflate(R.menu.context_menu, menu)
-                    setOnMenuItemClickListener { menuItem ->
-                        when (menuItem.itemId) {
-                            R.id.menu_to_back -> moveItemAndUpdate(
-                                adapterPosition,
-                                itemList.size - 1
-                            )
+            binding.itemRoot.setOnLongClickListener { _ ->
+                popupMenu.setOnMenuItemClickListener { menuItem ->
+                    when (menuItem.itemId) {
+                        R.id.menu_to_back -> moveItemAndUpdate(
+                            adapterPosition,
+                            itemList.size - 1
+                        )
 
-                            R.id.menu_back -> if (adapterPosition < itemList.size - 1) moveItemAndUpdate(
-                                adapterPosition,
-                                adapterPosition + 1
-                            )
+                        R.id.menu_back -> if (adapterPosition < itemList.size - 1) moveItemAndUpdate(
+                            adapterPosition,
+                            adapterPosition + 1
+                        )
 
-                            R.id.menu_forward -> if (adapterPosition > 0) moveItemAndUpdate(
-                                adapterPosition,
-                                adapterPosition - 1
-                            )
+                        R.id.menu_forward -> if (adapterPosition > 0) moveItemAndUpdate(
+                            adapterPosition,
+                            adapterPosition - 1
+                        )
 
-                            R.id.menu_to_front -> moveItemAndUpdate(adapterPosition, 0)
-                        }
-                        true
+                        R.id.menu_to_front -> moveItemAndUpdate(adapterPosition, 0)
                     }
-                }.show()
+                    true
+                }
+                popupMenu.show()
                 true
             }
         }
