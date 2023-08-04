@@ -27,7 +27,6 @@
         <com.google.android.material.button.MaterialButton
             style="@style/slidePlusBtnStyle"
             android:id="@+id/btn_add_slide"
-            style="@style/slidePlusBtnStyle"
             android:layout_width="0dp"
             android:layout_height="100dp"
             android:backgroundTint="@color/sky"
