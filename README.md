@@ -67,10 +67,6 @@ UDF 아키텍처 패턴에 맞게 코드를 수정
 - 네트워크 요청은 SlideManager에서 이루어짐
 - 네트워크 요청 처리는 코루틴을 이용해 비동기 처리
 - 슬라이드가 추가되는 것을 확인하기 위해 리싸이클러뷰 아이템에 애니메이션 적용
-<<<<<<< HEAD
-=======
-  <<<<<<< feature/drawing
->>>>>>> 9b8e1e2 ([Refactor] 커스텀 뷰 클래스 분리 (07.24))
 ---
 ### 결과화면
 ![결과](https://github.com/softeerbootcamp-2nd/android-slide/assets/54762273/26e33884-de8a-4956-96de-fc942ce89cc4)
@@ -83,7 +79,6 @@ UDF 아키텍처 패턴에 맞게 코드를 수정
 ---
 ### 결과화면
 ![ezgif com-video-to-gif](https://github.com/softeerbootcamp-2nd/android-slide/assets/54762273/496bbf3c-1635-4f1a-beda-e30233eb438b)
-<<<<<<< HEAD
 
 ## (Step 4-3) 상태 저장하기
 - 앱 실행 이후 생성한 모든 객체의 속성을 앱 종료시 속성들을 직렬화해서 저장
@@ -108,5 +103,3 @@ UDF 아키텍처 패턴에 맞게 코드를 수정
 ![ezgif com-video-to-gif (1)](https://github.com/softeerbootcamp-2nd/android-slide/assets/54762273/b50a5dbe-82c1-4b47-9b73-1e8fe716b1dd)
 =======
 - 서버에 데이터를 한번 받아온 상태에서 추가적으로 요청을 해도 Slide 객체는 추가되지 않음 (같은 UUID)를 가졌기 떄문
----
->>>>>>> 9b8e1e2 ([Refactor] 커스텀 뷰 클래스 분리 (07.24))

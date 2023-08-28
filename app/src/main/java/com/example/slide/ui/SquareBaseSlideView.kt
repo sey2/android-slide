@@ -39,7 +39,7 @@ class SquareBaseSlideView(
     }
 
     override fun handleTouch(view: View, motionEvent: MotionEvent) {
-        handleMovement(view, motionEvent)
+       handleMovement(view, motionEvent)
     }
 
     override fun drawSlide(slide: Any, canvas: Canvas?) {

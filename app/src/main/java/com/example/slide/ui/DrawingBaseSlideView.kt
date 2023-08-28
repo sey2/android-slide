@@ -21,8 +21,8 @@ class DrawingBaseSlideView(
     viewModel: SlideViewModel
 ) : BaseSlideView(context, svId, viewModel) {
 
-    private var lastTouchX: Float = 0.0f
-    private var lastTouchY: Float = 0.0f
+   private var lastTouchX: Float = 0.0f
+   private var lastTouchY: Float = 0.0f
     override fun setupLayoutParams() {
         val sizeInPixels = dpToPx(DEFAULT_DP_SIZE)
         val layoutParams = ConstraintLayout.LayoutParams(sizeInPixels, sizeInPixels)
